@@ -1,111 +1,121 @@
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 class Solution {
-    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
-        int equations_len = equations.size();
-        UnionFind unionFind = new UnionFind(equations_len * 2);
-        Map<String, Integer> hashmap = new HashMap<>(equations_len * 2);
+    // public int[] topKFrequent(int[] nums, int k) {
+    // Map<String, Integer> memo = new LinkedHashMap<>();
+    // for (int i = 0; i < nums.length; i++) {
+    // String key = String.valueOf(nums[i]);
+    // if (memo.containsKey(key)) {
+    // memo.put(key, memo.get(key) + 1);
+    // } else {
+    // memo.put(key, 1);
+    // }
+    // }
 
-        int id = 0;
-        for (int i = 0; i < equations_len; i++) {
-            String x = equations.get(i).get(0);
-            String y = equations.get(i).get(1);
-            if (!hashmap.containsKey(x)) {
-                hashmap.put(x, id);
-                id++;
-            }
-            if (!hashmap.containsKey(y)) {
-                hashmap.put(y, id);
-                id++;
-            }
-            unionFind.union(hashmap.get(x), hashmap.get(y), values[i]);
+    // List<Map.Entry<String, Integer>> list = new ArrayList<>(memo.entrySet());
+
+    // // 使用自定义Comparator对List进行排序
+    // Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+
+    // // 取前k个元素
+    // int[] result = new int[k];
+    // for (int i = 0; i < k; i++) {
+    // result[i] = Integer.valueOf(list.get(i).getKey());
+    // }
+
+    // return result;
+    // }
+
+    // 堆排序
+    // public int[] topKFrequent(int[] nums, int k) {
+    // Map<Integer, Integer> memo = new HashMap<>();
+    // for (int i = 0; i < nums.length; i++) {
+    // memo.put(nums[i], memo.getOrDefault(nums[i], 0) + 1);
+    // }
+
+    // List<Map.Entry<Integer, Integer>> list = new ArrayList<>(memo.entrySet());
+    // int n = list.size();
+
+    // for (int i = n - 1; i >= 0; i--) {
+    // for (int j = (i + 1 / 2) - 1; j >= 0; j--) {
+    // upFilter(list, j, i + 1);
+    // }
+    // exchange(list, 0, i);
+    // }
+
+    // // 取前k个元素
+    // int[] result = new int[k];
+    // for (int i = 0; i < k; i++) {
+    // result[i] = Integer.valueOf(list.get(i).getKey());
+    // }
+
+    // return result;
+    // }
+
+    // public void upFilter(List<Map.Entry<Integer, Integer>> list, int i, int n) {
+    // int temp = i;
+    // if (2 * i + 1 < n && list.get(i).getValue() > list.get(2 * i + 1).getValue())
+    // {
+    // temp = 2 * i + 1;
+    // }
+    // if (2 * i + 2 < n && list.get(temp).getValue() > list.get(2 * i +
+    // 2).getValue()) {
+    // temp = 2 * i + 2;
+    // }
+    // if (i != temp) {
+    // exchange(list, i, temp);
+    // }
+    // }
+
+    // public void exchange(List<Map.Entry<Integer, Integer>> list, int i, int j) {
+    // Map.Entry<Integer, Integer> temp = list.get(i);
+    // list.set(i, list.get(j));
+    // list.set(j, temp);
+    // }
+
+    // 桶排序
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> memo = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            memo.put(nums[i], memo.getOrDefault(nums[i], 0) + 1);
         }
 
-        int queries_len = queries.size();
-        double[] res = new double[queries_len];
-        for (int i = 0; i < queries_len; i++) {
-            String x = queries.get(i).get(0);
-            String y = queries.get(i).get(1);
-            if (hashmap.containsKey(x) && hashmap.containsKey(y)) {
-                res[i] = unionFind.connect(hashmap.get(x), hashmap.get(y));
-            } else {
-                res[i] = -1.0d;
+        List<Integer>[] buckets = new List[nums.length + 1];
+        for (Integer key : memo.keySet()) {
+            if (buckets[memo.get(key)] == null) {
+                buckets[memo.get(key)] = new ArrayList();
+            }
+            buckets[memo.get(key)].add(key);
+        }
+
+        int[] res = new int[k];
+        int pos = 0;
+        for (int i = nums.length; i >= 0 && pos < k; i--) {
+            if (buckets[i] != null) {
+                for (int j = 0; j < buckets[i].size(); j++) {
+                    res[pos] = buckets[i].get(j);
+                    pos++;
+                }
             }
         }
-        unionFind.printInfo();
+
         return res;
-    }
-
-    public class UnionFind {
-        private int[] parent;
-        private double[] weight;
-
-        public UnionFind(int n) {
-            this.parent = new int[n];
-            this.weight = new double[n];
-            for (int i = 0; i < n; i++) {
-                this.parent[i] = i;
-                this.weight[i] = 1.0;
-            }
-        }
-
-        public void union(int x, int y, double value) {
-            int parent_x = find(x);
-            int parent_y = find(y);
-
-            if (parent_x == parent_y) {
-                return;
-            }
-            parent[parent_x] = parent_y;
-            weight[parent_x] = value * weight[y] / weight[x];
-        }
-
-        public int find(int x) {
-            if (x != parent[x]) {
-                int parent_x = parent[x];
-                parent[x] = find(parent_x);
-                weight[x] *= weight[parent_x];
-            }
-            return parent[x];
-        }
-
-        public double connect(int x, int y) {
-            int parent_x = find(x);
-            int parent_y = find(y);
-            if (parent_x == parent_y) {
-                return weight[x] / weight[y];
-            }
-            return -1.0d;
-        }
-
-        public void printInfo() {
-            for (int i = 0; i < parent.length; i++) {
-                System.out.println(i + "'s parent:" + parent[i]);
-            }
-            for (int i = 0; i < weight.length; i++) {
-                System.out.println(i + "'s weight:" + weight[i]);
-            }
-        }
     }
 
     public static void main(String[] args) {
         Solution sol = new Solution();
-        List<List<String>> equations = Arrays.asList(
-                Arrays.asList("a", "b"),
-                Arrays.asList("e", "f"),
-                Arrays.asList("b", "e"));
-        double[] values = { 3.4, 1.4, 2.3 };
-        List<List<String>> queries = Arrays.asList(
-                Arrays.asList("a", "f")
-        // Arrays.asList("b", "a"),
-        // Arrays.asList("a", "e"),
-        // Arrays.asList("a", "a"),
-        // Arrays.asList("x", "x")
-        );
-
-        System.out.println(sol.calcEquation(equations, values, queries));
+        int[] nums1 = { 1 };
+        int k1 = 1;
+        System.out.println(sol.topKFrequent(nums1, k1));
+        // System.out.println(sol.decodeString(s2));
     }
 }

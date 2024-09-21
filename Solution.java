@@ -1,121 +1,90 @@
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
 
-class Solution {
-    // public int[] topKFrequent(int[] nums, int k) {
-    // Map<String, Integer> memo = new LinkedHashMap<>();
-    // for (int i = 0; i < nums.length; i++) {
-    // String key = String.valueOf(nums[i]);
-    // if (memo.containsKey(key)) {
-    // memo.put(key, memo.get(key) + 1);
-    // } else {
-    // memo.put(key, 1);
-    // }
-    // }
+/**
+ * Definition for a binary tree node.
+ */
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
 
-    // List<Map.Entry<String, Integer>> list = new ArrayList<>(memo.entrySet());
+    TreeNode(int x) {
+        val = x;
+    }
+}
 
-    // // 使用自定义Comparator对List进行排序
-    // Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+public class Solution {
+    // 前序遍历
+    private String before(TreeNode root) {
+        if (root == null) {
+            return "None";
+        }
+        String left = before(root.left);
+        String right = before(root.right);
+        String res = String.valueOf(root.val);
+        if (left != "") {
+            res += "/" + left;
+        }
+        if (right != "") {
+            res += "/" + right;
+        }
+        return res;
+    }
 
-    // // 取前k个元素
-    // int[] result = new int[k];
-    // for (int i = 0; i < k; i++) {
-    // result[i] = Integer.valueOf(list.get(i).getKey());
-    // }
-
-    // return result;
-    // }
-
-    // 堆排序
-    // public int[] topKFrequent(int[] nums, int k) {
-    // Map<Integer, Integer> memo = new HashMap<>();
-    // for (int i = 0; i < nums.length; i++) {
-    // memo.put(nums[i], memo.getOrDefault(nums[i], 0) + 1);
-    // }
-
-    // List<Map.Entry<Integer, Integer>> list = new ArrayList<>(memo.entrySet());
-    // int n = list.size();
-
-    // for (int i = n - 1; i >= 0; i--) {
-    // for (int j = (i + 1 / 2) - 1; j >= 0; j--) {
-    // upFilter(list, j, i + 1);
-    // }
-    // exchange(list, 0, i);
-    // }
-
-    // // 取前k个元素
-    // int[] result = new int[k];
-    // for (int i = 0; i < k; i++) {
-    // result[i] = Integer.valueOf(list.get(i).getKey());
-    // }
-
-    // return result;
-    // }
-
-    // public void upFilter(List<Map.Entry<Integer, Integer>> list, int i, int n) {
-    // int temp = i;
-    // if (2 * i + 1 < n && list.get(i).getValue() > list.get(2 * i + 1).getValue())
-    // {
-    // temp = 2 * i + 1;
-    // }
-    // if (2 * i + 2 < n && list.get(temp).getValue() > list.get(2 * i +
-    // 2).getValue()) {
-    // temp = 2 * i + 2;
-    // }
-    // if (i != temp) {
-    // exchange(list, i, temp);
-    // }
-    // }
-
-    // public void exchange(List<Map.Entry<Integer, Integer>> list, int i, int j) {
-    // Map.Entry<Integer, Integer> temp = list.get(i);
-    // list.set(i, list.get(j));
-    // list.set(j, temp);
-    // }
-
-    // 桶排序
-    public int[] topKFrequent(int[] nums, int k) {
-        Map<Integer, Integer> memo = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            memo.put(nums[i], memo.getOrDefault(nums[i], 0) + 1);
+    // "3/2/3/None/None/None/4/None/None"
+    public TreeNode restoreTree(List<String> series) {
+        if (series.get(0).equals("None")) {
+            series.remove(0);
+            return null;
         }
 
-        List<Integer>[] buckets = new List[nums.length + 1];
-        for (Integer key : memo.keySet()) {
-            if (buckets[memo.get(key)] == null) {
-                buckets[memo.get(key)] = new ArrayList();
-            }
-            buckets[memo.get(key)].add(key);
-        }
+        TreeNode res = new TreeNode(Integer.valueOf(series.get(0)));
+        series.remove(0);
+        res.left = restoreTree(series);
+        res.right = restoreTree(series);
 
-        int[] res = new int[k];
-        int pos = 0;
-        for (int i = nums.length; i >= 0 && pos < k; i--) {
-            if (buckets[i] != null) {
-                for (int j = 0; j < buckets[i].size(); j++) {
-                    res[pos] = buckets[i].get(j);
-                    pos++;
-                }
-            }
-        }
+        return res;
+    }
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        String beforeStr = before(root);
+        return beforeStr;
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        String[] series = data.split("/");
+        List<String> list = new ArrayList<>(Arrays.asList(series));
+        TreeNode res = restoreTree(list);
 
         return res;
     }
 
     public static void main(String[] args) {
         Solution sol = new Solution();
-        int[] nums1 = { 1 };
-        int k1 = 1;
-        System.out.println(sol.topKFrequent(nums1, k1));
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.right.left = new TreeNode(4);
+        root.right.right = new TreeNode(5);
+
+        TreeNode root2 = new TreeNode(3);
+        root2.left = new TreeNode(2);
+        root2.right = new TreeNode(4);
+        root2.left.left = new TreeNode(3);
+
+        String series = sol.serialize(root2);
+        System.out.println(series);
+        TreeNode deSer = sol.deserialize(series);
         // System.out.println(sol.decodeString(s2));
     }
 }
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));

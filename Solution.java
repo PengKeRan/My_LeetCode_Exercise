@@ -17,6 +17,7 @@ class TreeNode {
 }
 
 public class Solution {
+
     // 前序遍历
     private String before(TreeNode root) {
         if (root == null) {
@@ -65,6 +66,7 @@ public class Solution {
     }
 
     public static void main(String[] args) {
+
         Solution sol = new Solution();
         TreeNode root = new TreeNode(1);
         root.left = new TreeNode(2);

@@ -37,7 +37,7 @@ class Solution(object):
         #     else:
         #         left_res[i] = -1
         #     stack.append(i)
-        #
+        
         # right_res = [n for _ in range(n)]
         # stack = []
         # for i in range(n - 1, -1, -1):
@@ -48,7 +48,7 @@ class Solution(object):
         #     else:
         #         right_res[i] = n
         #     stack.append(i)
-        #
+        
         # res = [heights[i]*(right_res[i]-left_res[i]-1) for i in range(n)]
         # return max(res)
 

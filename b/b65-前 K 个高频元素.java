@@ -64,12 +64,10 @@ class TopKFrequent {
     // return result;
     // }
 
-    // public void upFilter(List<Map.Entry<Integer, Integer>> list, int i, int n)
-    // {
+    // public void upFilter(List<Map.Entry<Integer, Integer>> list, int i, int n) {
     // int temp = i;
     // if (2 * i + 1 < n && list.get(i).getValue() > list.get(2 * i +
-    // 1).getValue())
-    // {
+    // 1).getValue()) {
     // temp = 2 * i + 1;
     // }
     // if (2 * i + 2 < n && list.get(temp).getValue() > list.get(2 * i +
@@ -81,8 +79,7 @@ class TopKFrequent {
     // }
     // }
 
-    // public void exchange(List<Map.Entry<Integer, Integer>> list, int i, int j)
-    // {
+    // public void exchange(List<Map.Entry<Integer, Integer>> list, int i, int j) {
     // Map.Entry<Integer, Integer> temp = list.get(i);
     // list.set(i, list.get(j));
     // list.set(j, temp);

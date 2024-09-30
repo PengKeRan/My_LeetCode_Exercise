@@ -23,6 +23,7 @@ class MergeKLists {
         }
     }
 
+    // 堆排序
     public ListNode mergeKLists(ListNode[] lists) {
         ListNode ans = new ListNode();
         int n = lists.length;
@@ -53,23 +54,11 @@ class MergeKLists {
     }
 
     private void upfilter(List<ListNode> arr, int pos, int n) {
-        int temp = pos;
-        if (2 * pos + 1 < n) {
-            if (arr.get(pos) == null && arr.get(2 * pos + 1) != null) {
-                temp = 2 * pos + 1;
-            } else if (arr.get(2 * pos + 1) != null && arr.get(2 * pos + 1).val < arr.get(pos).val) {
-                temp = 2 * pos + 1;
+        for (int childPos = 2 * pos + 1; childPos <= 2 * pos + 2 && childPos < n; childPos++) {
+            if (arr.get(pos) == null && arr.get(childPos) != null ||
+                    (arr.get(childPos) != null && arr.get(childPos).val < arr.get(pos).val)) {
+                swap(arr, pos, childPos);
             }
-            swap(arr, pos, temp);
-        }
-        temp = pos;
-        if (2 * pos + 2 < n) {
-            if (arr.get(pos) == null && arr.get(2 * pos + 2) != null) {
-                temp = 2 * pos + 2;
-            } else if (arr.get(2 * pos + 2) != null && arr.get(2 * pos + 2).val < arr.get(pos).val) {
-                temp = 2 * pos + 2;
-            }
-            swap(arr, pos, temp);
         }
     }
 
@@ -80,26 +69,64 @@ class MergeKLists {
         arr.set(j, temp);
     }
 
+    // 合并两个链表
+    public ListNode mergeKLists2(ListNode[] lists) {
+        ListNode ans = null;
+        int n = lists.length;
+        for (ListNode root : lists) {
+            if (root == null) {
+                continue;
+            }
+            ans = merge2lists(ans, root);
+        }
+
+        return ans;
+    }
+
+    private ListNode merge2lists(ListNode l1, ListNode l2) {
+        ListNode res = new ListNode();
+        ListNode temp = new ListNode();
+        res = temp;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                temp.next = l1;
+                l1 = l1.next;
+                temp = temp.next;
+            } else {
+                temp.next = l2;
+                l2 = l2.next;
+                temp = temp.next;
+            }
+        }
+        if (l1 != null) {
+            temp.next = l1;
+        }
+        if (l2 != null) {
+            temp.next = l2;
+        }
+        return res.next;
+    }
+
     public static void main(String[] args) {
         MergeKLists sol = new MergeKLists();
         ListNode[] lists = new ListNode[3];
 
         // 初始化第一个链表: [1,4,5]
-        lists[0] = new ListNode(1);
-        lists[0].next = new ListNode(4);
-        lists[0].next.next = new ListNode(5);
+        lists[0] = new ListNode(2);
+        // lists[0].next = new ListNode(4);
+        // lists[0].next.next = new ListNode(5);
 
         // 初始化第二个链表: [1,3,4]
-        lists[1] = new ListNode(1);
-        lists[1].next = new ListNode(3);
-        lists[1].next.next = new ListNode(4);
+        lists[1] = null;
+        // lists[1].next = new ListNode(3);
+        // lists[1].next.next = new ListNode(4);
 
         // 初始化第三个链表: [2,6]
-        lists[2] = new ListNode(2);
-        lists[2].next = new ListNode(6);
+        lists[2] = new ListNode(-1);
+        // lists[2].next = new ListNode(6);
 
         // 打印链表以验证初始化
-        ListNode res = (sol.mergeKLists(lists));
+        ListNode res = (sol.mergeKLists2(lists));
 
         printList(res);
     }

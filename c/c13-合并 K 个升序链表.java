@@ -37,7 +37,6 @@ class MergeKLists {
         if (list.size() == 0) {
             return ans.next;
         }
-        // 堆排序
         while (true) {
             for (int j = n / 2 - 1; j >= 0; j--) {
                 upfilter(list, j, n);

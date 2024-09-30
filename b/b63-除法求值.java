@@ -51,7 +51,7 @@ class CalcEquation {
         return res;
     }
 
-    public class UnionFind {
+    private class UnionFind {
         private int[] parent;
         private double[] weight;
 

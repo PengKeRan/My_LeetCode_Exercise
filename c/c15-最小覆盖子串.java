@@ -16,7 +16,6 @@ class MinWindow {
         int minlen = Integer.MAX_VALUE, minleft = 0;
 
         while (right < n) {
-            System.out.println(left + "-" + right);
             Character rightChar = s.charAt(right);
             if (target_map.containsKey(rightChar)) { // 移右指针
                 window_map.put(rightChar, window_map.getOrDefault(rightChar, 0) + 1);
@@ -41,7 +40,6 @@ class MinWindow {
                 left++;
             }
         }
-
         return minlen == Integer.MAX_VALUE ? "" : s.substring(minleft, minleft + minlen);
     }
 

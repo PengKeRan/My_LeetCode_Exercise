@@ -11,10 +11,28 @@ class Solution(object):
         :type ratings: List[int]
         :rtype: int
         """
+        ans = 0
+        n = len(ratings)
+        left = [0 for _ in range(n)]
+        left [0] = 1
+        for i in range(n):
+            if i > 0 and ratings[i] > ratings[i-1]:
+                left[i] += left[i-1] + 1
+            else:
+                left[i] = 1
         
+        right = 0
+        for i in reversed(range(n)):
+            if i < n-1 and ratings[i] > ratings[i+1]:
+                right += 1
+            else:
+                right = 1
+            ans += max(left[i], right)
 
 
-ratings = [1,0,2]
+        return ans
+
+ratings = [1,3,2,2,1]
 print(Solution().candy(ratings))
 
 

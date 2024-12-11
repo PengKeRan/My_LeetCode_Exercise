@@ -18,24 +18,17 @@ class Solution(object):
         :type right: int
         :rtype: Optional[ListNode]
         """
-        cnt = 1
-        res = head
-        while head:
-            if cnt < left or cnt > right:
-                cnt += 1
-                head = head.next
-                continue
-            else:
-                cur = head
-                prev = None
-                while cur:
-                    if cnt == right:
-                        break
-                    temp = cur.next
-                    cur.next = prev
-                    prev = cur
-                    cur = temp
-                    cnt += 1
-                prev.next = cur
-                return res
-        return None
+
+        dummy = ListNode()
+        dummy.next = head
+        pre = dummy
+        for _ in range(left - 1):
+            pre = pre.next
+
+        cur = pre.next
+        for _ in range(right - left):
+            temp = cur.next
+            cur.next = temp.next
+            temp.next = pre.next
+            pre.next = temp
+        return dummy.next

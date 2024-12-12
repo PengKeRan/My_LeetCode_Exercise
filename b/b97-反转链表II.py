@@ -18,17 +18,30 @@ class Solution(object):
         :type right: int
         :rtype: Optional[ListNode]
         """
-
         dummy = ListNode()
         dummy.next = head
-        pre = dummy
+        prev = dummy
         for _ in range(left - 1):
-            pre = pre.next
+            prev = prev.next
 
-        cur = pre.next
+        cur = prev.next
         for _ in range(right - left):
-            temp = cur.next
-            cur.next = temp.next
-            temp.next = pre.next
-            pre.next = temp
+            next = cur.next
+            cur.next = next.next
+            next.next = prev.next
+            prev.next = next
         return dummy.next
+
+        # dummy = ListNode()
+        # dummy.next = head
+        # pre = dummy
+        # for _ in range(left - 1):
+        #     pre = pre.next
+
+        # cur = pre.next
+        # for _ in range(right - left):
+        #     temp = cur.next
+        #     cur.next = temp.next
+        #     temp.next = pre.next
+        #     pre.next = temp
+        # return dummy.next

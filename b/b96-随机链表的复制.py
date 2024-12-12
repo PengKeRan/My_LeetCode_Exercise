@@ -23,6 +23,18 @@ class Solution(object):
         :type head: Node
         :rtype: Node
         """
+        memo = {}
+        cur = head
+        while cur:
+            memo[cur] = Node(x=cur.val)
+            cur = cur.next
+        cur = head
+        while cur:
+            memo[cur].next = memo.get(cur.next)
+            memo[cur].random = memo.get(cur.random)
+            cur = cur.next
+        return memo.get(head)
+
         # memo = {}
         # res = Node(0)
         # node_arr = []

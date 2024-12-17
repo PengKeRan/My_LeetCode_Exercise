@@ -1,3 +1,5 @@
-arr = [1, 3, 2]
-sorted(arr)
-print(arr)
+a = None
+b = None
+c = 1
+print(a == b)
+print(a == c)

@@ -7,23 +7,31 @@
 
 
 class Solution(object):
-    def sonPathSum(self, root):
-        if len(self.sons[root]) == 0:
-            return 0
-        res = 0
-        for son in self.sons[root]:
-            res += self.sonPathSum(son)
-            res += self.numOfSonNodes(son)
-        return res
-    
-    def numOfSonNodes(self, root):
-        if self.sonsNum[root] != 0:
-            return self.sonsNum[root]
+    def getTreeNodesNum(self, root):
+        if self.treeNodesNum[root] != 0:
+            return self.treeNodesNum[root]
         res = 1
         for son in self.sons[root]:
-            res += self.numOfSonNodes(son)
-        self.sonsNum[root] = res
-        return res
+            res += self.getTreeNodesNum(son)
+        self.treeNodesNum[root] = res
+        return self.treeNodesNum[root]
+
+    def getSonsPathSum(self, root):
+        if self.sonsPathSum[root] != 0:
+            return self.self.sonsPathSum[root]
+        res = 0
+        for son in self.sons[root]:
+            res += self.getSonsPathSum(son)
+            res += self.getTreeNodesNum(son)
+        self.sonsPathSum[root] = res
+        return self.sonsPathSum[root]
+
+    def reroot(self, root, fa):
+
+        for son in self.edges[root]:
+            if son != fa:
+                self.ans[son] = self.ans[root] + self.n - 2 * self.getTreeNodesNum(son)
+                self.reroot(son, root)
 
     def sumOfDistancesInTree(self, n, edges):
         """
@@ -31,36 +39,31 @@ class Solution(object):
         :type edges: List[List[int]]
         :rtype: List[int]
         """
-        edge = [[] for _ in range(n)]
-        for i,j in edges:
-            edge[i].append(j)
-            edge[j].append(i)
+        self.n = n
+        self.edges = [[] for _ in range(n)]
+        for [i, j] in edges:
+            self.edges[i].append(j)
+            self.edges[j].append(i)
 
-        sons = [[] for _ in range(n)]
-        farthers = [None]*n
+        self.sons = [[] for _ in range(n)]
+        self.father = [None for _ in range(n)]
+        self.father[0] = -1
 
         stack = [0]
         while stack:
-            node = stack.pop()
-            for e in edge[node]:
-                if e != 0 and farthers[e] == None :
-                    farthers[e] = node
-                    sons[node].append(e)
-                    stack.append(e)
+            fa = stack.pop()
+            for son in self.edges[fa]:
+                if self.father[son] is None:
+                    self.father[son] = fa
+                    self.sons[fa].append(son)
+                    stack.append(son)
 
-        self.sons = sons
-        self.sonsNum = [0] * n
-        self.ans = [0] * n
+        self.sonsPathSum = [0 for _ in range(n)]
+        self.treeNodesNum = [0 for _ in range(n)]
+        self.ans = [0 for _ in range(n)]
+        self.ans[0] = self.getSonsPathSum(0)
 
-        self.ans[0] = self.sonPathSum(0)
-        self.sonsNum[0] = self.numOfSonNodes(0)
-
-        def reroot(root, fa):
-            for son in self.sons[root]:
-                if son != fa:
-                    self.ans[son] = self.ans[root] + n - self.sonsNum[son] * 2
-                    reroot(son, fa)
-        reroot(0, -1)
+        self.reroot(0, -1)
         return self.ans
 
 

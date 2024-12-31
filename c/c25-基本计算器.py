@@ -5,14 +5,32 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
+        i = 0
+        while i < len(s):
+            if s[i] == "-":
+                pos = i - 1
+                while pos >= 0 and s[pos] == " " and not s[pos].isdigit():
+                    pos -= 1
+                if pos >= 0 and (s[pos].isdigit() or s[pos] == ")"):
+                    i += 1
+                    continue
+                if pos < 0 or s[pos] in {"+", "-", "(", "*", "/"}:
+                    s = s[:i] + "0" + s[i:]
+                    i += 1
+            i += 1
         tokens = self.getToken(s)
-        return tokens
+        return self.calTokens(tokens)
 
     def getToken(self, s):
         operator = []
         tokens = []
-        for c in s:
-            if c == "(":
+        i = 0
+        while i < len(s):
+            c = s[i]
+            if c == " ":
+                i += 1
+                continue
+            elif c == "(":
                 operator.append(c)
             elif c == ")":
                 while operator:
@@ -20,29 +38,58 @@ class Solution(object):
                     if top == "(":
                         break
                     tokens.append(top)
-            elif c in {"+", "-"}:
+            elif c == "+":
                 temp = []
                 while operator:
-                    if operator[-1] in {"+", "-"}:
+                    if operator[-1] in {"+", "(", ")"}:
                         break
-                    temp.append(operator.pop())
+                    tokens.append(operator.pop())
                 operator.append(c)
-                while temp:
-                    operator.append(temp.pop())
+            elif c == "-":
+                temp = []
+                while operator:
+                    if operator[-1] in {"+", "(", ")"}:
+                        break
+                    tokens.append(operator.pop())
+                operator.append(c)
             elif c in {"*", "/"}:
                 operator.append(c)
             else:
-                tokens.append(float(c))
+                start = i
+                end = i
+                while end < len(s) and s[end] not in {
+                    "+",
+                    "-",
+                    "(",
+                    ")",
+                    "*",
+                    "/",
+                    " ",
+                }:
+                    end += 1
+                tokens.append(float(s[start:end]))
+                i = end - 1
+            i += 1
         while operator:
             tokens.append(operator.pop())
         return tokens
 
     def calTokens(self, tokens):
+        stack = []
         for c in tokens:
-            if c ==
-        return 0
+            if c == "+":
+                stack.append(stack.pop() + stack.pop())
+            elif c == "-":
+                stack.append(-stack.pop() + stack.pop())
+            elif c == "*":
+                stack.append(stack.pop() * stack.pop())
+            elif c == "/":
+                stack.append(float(int(1 / stack.pop() * stack.pop())))
+            else:
+                stack.append(float(c))
+        return int(stack[0])
 
 
-s = "(1+(4+5+2)-3)+(6+8)"
+s = "(6)-(8)-(7)+(1+(6))"
 sol = Solution()
 print(sol.calculate(s))

@@ -1,3 +1,3 @@
-a = [1, 2, 3]
-print(a.pop())
-print(a)
+a = None
+b = 1
+print(b - a)

@@ -1,3 +1,2 @@
-a = None
-b = 1
-print(b - a)
+a, b = [1, 2]
+print(a, b)

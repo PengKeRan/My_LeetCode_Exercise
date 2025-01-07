@@ -27,6 +27,7 @@ class Solution(object):
             cur.next = next.next
             next.next = prev.next
             prev.next = next
+
         # def printList(node):
         #     while node is not None:
         #         print(node.val)
@@ -43,6 +44,17 @@ class Solution(object):
         #     cur = temp
         # # printList(pre)
         # return pre
+        dummy = ListNode()
+        dummy.next = head
+        pre = dummy
+        cur = pre.next
+        while True:
+            if cur is None or cur.next is None:
+                return dummy.next
+            next = cur.next
+            cur.next = next.next
+            next.next = pre.next
+            pre.next = next
 
 
 sol = Solution()

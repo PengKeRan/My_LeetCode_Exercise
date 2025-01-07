@@ -49,7 +49,7 @@ class TopKFrequent {
         int n = list.size();
 
         for (int i = n - 1; i >= 0; i--) {
-            for (int j = (i + 1 / 2) - 1; j >= 0; j--) {
+            for (int j = ((i - 1) / 2) - 1; j >= 0; j--) {
                 upFilter(list, j, i + 1);
             }
             exchange(list, 0, i);
@@ -116,9 +116,9 @@ class TopKFrequent {
 
     public static void main(String[] args) {
         TopKFrequent sol = new TopKFrequent();
-        int[] nums1 = { 1 };
-        int k1 = 1;
-        System.out.println(sol.topKFrequent(nums1, k1));
+        int[] nums1 = { 101, 102, 103, 104, 105 };
+        int k1 = nums1.length;
+        System.out.println(Arrays.toString(sol.topKFrequent(nums1, k1)));
         // System.out.println(sol.decodeString(s2));
     }
 }

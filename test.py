@@ -1,3 +1,6 @@
+import time
+
+
 # 堆排序
 def heap_sort1(nums):
 
@@ -52,19 +55,35 @@ def heap_sort2(nums):
     return nums
 
 
-import time
+def quickSort(nums):
+    n = len(nums)
 
-nums = [i for i in reversed(range(1000))]
+    def sort(nums, left, right):
+        if left >= right:
+            return
+        base = nums[left]
+        i, j = left, right
+        while i < j:
+            while i < j and nums[j] >= base:
+                j -= 1
+            while i < j and nums[i] <= base:
+                i += 1
+            if i < j:
+                nums[i], nums[j] = nums[j], nums[i]
 
-start_time = time.time()  # 开始计时
-sorted_nums = heap_sort1(nums)
-end_time = time.time()  # 结束计时
-print(f"Execution time: {end_time - start_time:.6f} seconds")
+        nums[left], nums[j] = nums[j], nums[left]
 
-nums = [i for i in reversed(range(1000))]
+        sort(nums, left, i - 1)
+        sort(nums, i + 1, right)
 
-start_time = time.time()  # 开始计时
-sorted_nums = heap_sort2(nums)
-end_time = time.time()  # 结束计时
+    sort(nums, 0, n - 1)
+    return nums
 
-print(f"Execution time: {end_time - start_time:.6f} seconds")
+
+# nums = [i for i in reversed(range(500))]
+# start_time = time.time()  # 开始计时
+# sorted_nums = quickSort(nums)
+# end_time = time.time()  # 结束计时
+# print(f"Execution time: {end_time - start_time:.6f} seconds")
+layer = [[2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1]]
+print([x[0] for x in layer])

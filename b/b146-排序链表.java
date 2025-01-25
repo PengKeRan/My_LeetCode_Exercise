@@ -30,12 +30,6 @@ class SortList {
     }
 
     private List<ListNode> split(ListNode head) {
-        if (head == null || head.next == null) {
-            List<ListNode> res = new ArrayList<>();
-            res.add(head);
-            res.add(null);
-            return res;
-        }
         ListNode slow = head, fast = head, prev = null;
         while (fast != null && fast.next != null) {
             prev = slow;

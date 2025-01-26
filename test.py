@@ -26,6 +26,7 @@ def heap_sort1(nums):
     return nums
 
 
+# 标准堆排序,从大到小
 def heap_sort2(nums):
     def swap(nums, i, j):
         temp = nums[i]
@@ -48,7 +49,7 @@ def heap_sort2(nums):
     for i in reversed(range((n - 1) // 2)):
         downfilter(nums, n, i)
 
-    for i in reversed(range(n - 1)):
+    for i in reversed(range(n)):
         swap(nums, 0, i)
         downfilter(nums, i, 0)
 
@@ -80,10 +81,10 @@ def quickSort(nums):
     return nums
 
 
-# nums = [i for i in reversed(range(500))]
+nums = [i for i in (range(10))]
 # start_time = time.time()  # 开始计时
-# sorted_nums = quickSort(nums)
+sorted_nums = heap_sort2(nums)
 # end_time = time.time()  # 结束计时
 # print(f"Execution time: {end_time - start_time:.6f} seconds")
-layer = [[2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1]]
-print([x[0] for x in layer])
+# layer = [[2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1]]
+# print([x[0] for x in layer])

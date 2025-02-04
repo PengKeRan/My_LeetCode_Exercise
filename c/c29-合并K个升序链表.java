@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * Definition for singly-linked list.
@@ -29,6 +31,29 @@ class MergeKLists {
         }
     }
 
+    // 333
+    // public ListNode mergeKLists(ListNode[] lists) {
+    // PriorityQueue<ListNode> pq = new PriorityQueue<>((o1, o2) ->
+    // Integer.compare(o1.val, o2.val));
+
+    // for (ListNode head : lists) {
+    // if (head != null) {
+    // pq.add(head);
+    // }
+    // }
+    // ListNode res = new ListNode();
+    // ListNode dummy = res;
+    // while (!pq.isEmpty()) {
+    // ListNode temp = pq.poll();
+    // dummy.next = temp;
+    // dummy = dummy.next;
+    // if (temp.next != null) {
+    // pq.add(temp.next);
+    // }
+    // }
+    // return res.next;
+    // }
+    // 222
     private void swap(List<ListNode> list, int i, int j) {
         ListNode temp = list.get(i);
         list.set(i, list.get(j));

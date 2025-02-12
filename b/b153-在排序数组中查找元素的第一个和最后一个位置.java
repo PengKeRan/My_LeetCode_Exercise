@@ -1,45 +1,40 @@
 class SearchRange {
     public int[] searchRange(int[] nums, int target) {
-        int n = nums.length;
-        if (n == 0) {
-            return new int[] { -1, -1 };
+        int left = sideSearch(nums, target, true);
+        int right = sideSearch(nums, target, false) - 1;
+        if (left <= right && left >= 0 && right < nums.length && nums[left] == target && nums[right] == target) {
+            return new int[] { left, right };
         }
-        return search(nums, 0, n - 1, target);
+        return new int[] { -1, -1 };
     }
 
-    private int[] search(int[] nums, int left, int right, int target) {
-        System.out.println(left + "," + right);
-        int mid = (left + right) / 2;
-
-        if (left == right) {
-            return nums[mid] == target ? new int[] { left, left } : new int[] { -1, -1 };
-        }
-        if (left + 1 == right) {
-            if (nums[left] == target && nums[right] == target) {
-                return new int[] { left, right };
-            } else if (nums[left] == target) {
-                return new int[] { left, left };
-            } else if (nums[right] == target) {
-                return new int[] { right, right };
+    private int sideSearch(int[] nums, int target, boolean flag) {
+        int ans = nums.length;
+        int left = 0, right = nums.length - 1;
+        int mid;
+        while (left <= right) {
+            mid = (left + right) / 2;
+            if (flag) {
+                if (nums[mid] < target) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                    ans = mid;
+                }
             } else {
-                return new int[] { -1, -1 };
+                if (nums[mid] <= target) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                    ans = mid;
+                }
             }
         }
-
-        if (nums[mid] < target) {
-            return search(nums, mid + 1, right, target);
-        } else if (nums[mid] > target) {
-            return search(nums, left, mid - 1, target);
-        } else {
-            int[] res = new int[2];
-            res[0] = search(nums, left, mid, target)[0];
-            res[1] = search(nums, mid, right, target)[1];
-            return res;
-        }
+        return ans;
     }
 
     public static void main(String[] args) {
-        int[] nums = { 5, 7, 7, 8, 8, 10 };
+        int[] nums = { 8, 8 };
         SearchRange sol = new SearchRange();
         int[] res = sol.searchRange(nums, 8);
         System.out.println(res[0] + "," + res[1]);

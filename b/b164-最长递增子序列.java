@@ -16,8 +16,26 @@ class LengthOfLIS {
         // }
         // return ans;
 
-        //
-        return 1;
+        // 二分查找
+        int n = nums.length;
+        int ans = 0;
+        int[] last = new int[n];
+        for (int i = 0; i < n; i++) {
+            int left = 0, right = ans;
+            while (left < right) {
+                int mid = (left + right) / 2;
+                if (last[mid] < nums[i]) {
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+            last[left] = nums[i];
+            if (ans == right) {
+                ans++;
+            }
+        }
+        return ans;
     }
 
     public static void main(String[] args) {

@@ -1,7 +1,7 @@
 // 427. 建立四叉树
 // Definition for a QuadTree node.
 
-class Solution {
+class Solutio {
     static class Node {
         public boolean val;
         public boolean isLeaf;

@@ -1,4 +1,4 @@
-class Solution {
+class Solutio {
     public String addBinary(String a, String b) {
         if (a.length() < b.length()) {
             String temp = a;

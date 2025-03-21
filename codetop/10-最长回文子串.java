@@ -1,35 +1,40 @@
 class LongestPalindrome2 {
     public String longestPalindrome(String s) {
-        if (s.length() == 1) {
-            return s;
-        }
-        StringBuilder t = new StringBuilder();
-        for (int i = 0; i < s.length(); i++) {
-            t.append(s.charAt(i));
-            t.append("#");
-        }
-        s = t.toString();
         int n = s.length();
-        int[] dp = new int[n];
-        int center = -1;
+        int centerL = 0, centerR = 0;
         int maxLen = 0;
         for (int i = 0; i < n; i++) {
-            dp[i] = 1;
-            while (i - dp[i] >= 0 && i + dp[i] < n && s.charAt(i - dp[i]) == s.charAt(i + dp[i])) {
-                dp[i]++;
+            int odd = expand(s, i, i, n);
+            if (odd > maxLen) {
+                centerL = i;
+                centerR = i;
+                maxLen = odd;
             }
-            if (dp[i] > maxLen) {
-                maxLen = dp[i];
-                center = i;
-            }
-        }
-        StringBuilder r = new StringBuilder();
-        for (int i = center - maxLen + 1; i < center + maxLen; i++) {
-            if (s.charAt(i) != '#') {
-                r.append(s.charAt(i));
+            int even = expand(s, i, i + 1, n);
+            if (even >= maxLen) {
+                centerL = i;
+                centerR = i + 1;
+                maxLen = even;
             }
         }
-        return r.toString();
+        return s.substring(centerL - maxLen, centerR + maxLen + 1);
+    }
+
+    private int expand(String s, int centerL, int centerR, int n) {
+        int len = 0;
+        if (centerL < 0 || centerR >= n) {
+            return -1;
+        }
+        for (int i = 0; i < n; i++) {
+            len = i - 1;
+            if (centerL - i < 0 || centerR + i >= n) {
+                break;
+            }
+            if (s.charAt(centerL - i) != s.charAt(centerR + i)) {
+                break;
+            }
+        }
+        return len;
     }
 
     public static void main(String[] args) {

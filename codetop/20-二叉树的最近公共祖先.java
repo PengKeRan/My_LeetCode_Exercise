@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -28,6 +30,8 @@ class Solution {
     }
 
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        Random random = new Random();
+        int a = random.nextInt();
         if (root == null || root.val == p.val || root.val == q.val) {
             return root;
         }

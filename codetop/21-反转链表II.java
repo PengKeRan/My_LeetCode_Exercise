@@ -27,33 +27,52 @@ class SReverseBetween {
     }
 
     public ListNode reverseBetween(ListNode head, int left, int right) {
-        ListNode dummy = new ListNode(), leftEnd = head, rightStart = head, prev, cur, next;
+        ListNode dummy = new ListNode();
         dummy.next = head;
-        leftEnd = dummy;
+        ListNode prev = dummy;
+        right = right - left;
         while (left > 1) {
-            leftEnd = leftEnd.next;
+            prev = prev.next;
             left--;
         }
-        ListNode h = leftEnd.next;
-        ListNode t = rightStart;
+        ListNode cur = prev.next;
         while (right > 0) {
-            t = rightStart;
-            rightStart = rightStart.next;
+            ListNode next = cur.next;
+            cur.next = next.next;
+            next.next = prev.next;
+            prev.next = next;
             right--;
         }
-        leftEnd.next = null;
-        t.next = null;
-        cur = h;
-        prev = null;
-        while (cur != null) {
-            next = cur.next;
-            cur.next = prev;
-            prev = cur;
-            cur = next;
-        }
-        leftEnd.next = prev;
-        h.next = rightStart;
         return dummy.next;
+
+        // ListNode dummy = new ListNode(), leftEnd = head, rightStart = head, prev,
+        // cur, next;
+        // dummy.next = head;
+        // leftEnd = dummy;
+        // while (left > 1) {
+        // leftEnd = leftEnd.next;
+        // left--;
+        // }
+        // ListNode h = leftEnd.next;
+        // ListNode t = rightStart;
+        // while (right > 0) {
+        // t = rightStart;
+        // rightStart = rightStart.next;
+        // right--;
+        // }
+        // leftEnd.next = null;
+        // t.next = null;
+        // cur = h;
+        // prev = null;
+        // while (cur != null) {
+        // next = cur.next;
+        // cur.next = prev;
+        // prev = cur;
+        // cur = next;
+        // }
+        // leftEnd.next = prev;
+        // h.next = rightStart;
+        // return dummy.next;
     }
 
     public static void main(String[] args) {
